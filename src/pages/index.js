@@ -1,10 +1,9 @@
-// components/Hero.js
 import React, { useState } from 'react';
 import { Typography, Box ,Grid} from '@mui/material';
 import { useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import PostSection from '@/components/PostSection';
-import { toggleDarkMode, selectDarkMode } from '../Reducers/darkModeSlice';
+import { selectDarkMode } from '../Reducers/darkModeSlice';
 
 import Image from "next/image"
 const Hero = ({ posts }) => {

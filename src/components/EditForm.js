@@ -6,7 +6,7 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
   const [editedPost, setEditedPost] = useState({ ...post });
   const [avatarFile, setAvatarFile] = useState(null);
   const [imagesFiles, setImagesFiles] = useState([]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedPost((prev) => ({ ...prev, [name]: value }));
@@ -28,13 +28,10 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
     formData.append('upload_preset', 'postTravel');
 
     try {
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dsyplkvow/image/upload',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+      const response = await fetch('https://api.cloudinary.com/v1_1/dsyplkvow/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
       const data = await response.json();
 
@@ -49,31 +46,9 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Edit Post</DialogTitle>
       <DialogContent>
-        <TextField
-          fullWidth
-          label="Title"
-          name="title"
-          value={editedPost.title}
-          onChange={handleChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Description"
-          name="description"
-          value={editedPost.description}
-          onChange={handleChange}
-          margin="normal"
-          multiline
-          rows={4}
-        />
-        <input
-          accept="image/*"
-          id="avatar"
-          type="file"
-          onChange={(e) => handleFileChange(e, 'avatar')}
-          style={{ display: 'none' }}
-        />
+        <TextField fullWidth label="Title" name="title" value={editedPost.title} onChange={handleChange} margin="normal" />
+        <TextField fullWidth label="Description" name="description" value={editedPost.description} onChange={handleChange} margin="normal" multiline rows={4} />
+        <input accept="image/*" id="avatar" type="file" onChange={(e) => handleFileChange(e, 'avatar')} style={{ display: 'none' }} />
         <label htmlFor="avatar">
           <Button variant="contained" component="span">
             Upload Avatar
@@ -81,14 +56,7 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
         </label>
         {avatarFile && <Typography>{avatarFile.name}</Typography>}
 
-        <input
-          accept="image/*"
-          id="images"
-          type="file"
-          onChange={(e) => handleFileChange(e, 'images')}
-          style={{ display: 'none' }}
-          multiple
-        />
+        <input accept="image/*" id="images" type="file" onChange={(e) => handleFileChange(e, 'images')} style={{ display: 'none' }} multiple />
         <label htmlFor="images">
           <Button variant="contained" component="span">
             Upload Images
@@ -100,18 +68,21 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={async () => {
-          const avatarUrl = avatarFile ? await handleImageUpload(avatarFile) : null;
-          const imagesUrls = await Promise.all(imagesFiles.map(handleImageUpload));
+        <Button
+          onClick={async () => {
+            const avatarUrl = avatarFile ? await handleImageUpload(avatarFile) : null;
+            const imagesUrls = await Promise.all(imagesFiles.map(handleImageUpload));
 
-          const editedData = {
-            ...editedPost,
-            avatar: avatarUrl || editedPost.avatar,
-            images: imagesUrls.length > 0 ? imagesUrls : editedPost.images,
-          };
+            const editedData = {
+              ...editedPost,
+              avatar: avatarUrl || editedPost.avatar,
+              images: imagesUrls.length > 0 ? imagesUrls : editedPost.images,
+            };
 
-          onConfirm(editedData);
-        }} color="primary">
+            onConfirm(editedData);
+          }}
+          color="primary"
+        >
           Save Changes
         </Button>
       </DialogActions>

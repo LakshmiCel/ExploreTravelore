@@ -7,10 +7,9 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import EditForm from '../../components/EditForm';
 import Layout from '../../components/Layout';
-import {  useSelector } from 'react-redux';
-import {  selectDarkMode } from '../../Reducers/darkModeSlice';
+import { useSelector } from 'react-redux';
+import { selectDarkMode } from '../../Reducers/darkModeSlice';
 import { format } from 'date-fns';
-
 
 export default function Post({ post }) {
   const [currentImage, setCurrentImage] = useState(0);
@@ -37,10 +36,7 @@ export default function Post({ post }) {
 
   const handleEditFormConfirm = async (editedPost) => {
     try {
-      const res = await axios.put(
-        `https://6564a1a2ceac41c0761e90ac.mockapi.io/api/v1/blogs/${post.id}`,
-        editedPost
-      );
+      const res = await axios.put(`https://6564a1a2ceac41c0761e90ac.mockapi.io/api/v1/blogs/${post.id}`, editedPost);
       console.log('Edit successful:', res.data);
       setEditModalOpen(false);
       router.push(`/posts/${post.id}`);
@@ -78,22 +74,25 @@ export default function Post({ post }) {
           paddingTop: '80px',
           backgroundColor: darkMode ? 'var(--color-bg-primary-dark)' : 'var(--color-bg-primary-light)',
           color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',
-          width:'100%'
-          // overflowX: 'hidden', 
+          width: '100%',
+          // overflowX: 'hidden',
         }}
       >
-        <Grid container spacing={3} sx={{ width:'70%',margin:'0 auto', textAlign: 'center' }}>
+        <Grid container spacing={3} sx={{ width: '70%', margin: '0 auto', textAlign: 'center' }}>
           <Grid item xs={12}>
-            <Typography gutterBottom  component="div" sx={{ fontFamily: 'roboto',fontSize: { xs: '1rem', md: '1.5rem' ,lg:'4rem'} }}>
+            <Typography gutterBottom component="div" sx={{ fontFamily: 'roboto', fontSize: { xs: '1rem', md: '1.5rem', lg: '4rem' } }}>
               {post.title}
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ position: 'relative', overflow: 'hidden'}}>
-            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '14px',marginBottom:'2%', fontStyle: 'italic', color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',}}>
-              `Posted on  
-              {" "+format(new Date(post.createdAt), 'dd/MM/yyyy')+" "}
-              by{' '}
-              <Image src={post.avatar} alt="Avatar" width={24} height={24} style={{ borderRadius: '50%', height: '24px', width: '24px' }} />
+          <Grid item xs={12} sx={{ position: 'relative', overflow: 'hidden' }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: '14px', marginBottom: '2%', fontStyle: 'italic', color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)' }}
+            >
+              `Posted on
+              {' ' + format(new Date(post.createdAt), 'dd/MM/yyyy') + ' '}
+              by <Image src={post.avatar} alt="Avatar" width={24} height={24} style={{ borderRadius: '50%', height: '24px', width: '24px' }} />
             </Typography>
             {Array.isArray(post.images) ? (
               <>
@@ -130,13 +129,13 @@ export default function Post({ post }) {
             )}
           </Grid>
           <Grid item xs={12} sx={{ textAlign: 'left', paddingBottom: '5' }}>
-            <Paper elevation={3} sx={{ mt:3 }}>
-              <Typography  variant="body1" color="text.primary" sx={{ padding:'20px',textTransform: 'sentense', lineHeight: '1.6' }}>
+            <Paper elevation={3} sx={{ mt: 3 }}>
+              <Typography variant="body1" color="text.primary" sx={{ padding: '20px', textTransform: 'sentense', lineHeight: '1.6' }}>
                 {post.description}
               </Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom:'10%'}}>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10%' }}>
             <Button color="primary" onClick={handleEditClick} sx={{ ml: 2 }}>
               Edit
             </Button>
@@ -149,13 +148,7 @@ export default function Post({ post }) {
         {/* EditForm modal */}
         <EditForm open={isEditModalOpen} onClose={handleEditFormClose} onConfirm={handleEditFormConfirm} post={post} />
 
-      
-        <Modal
-          open={isDeleteModalOpen}
-          onClose={handleDeleteCancel}
-          aria-labelledby="delete-confirmation-modal"
-          aria-describedby="delete-confirmation-modal-description"
-        >
+        <Modal open={isDeleteModalOpen} onClose={handleDeleteCancel} aria-labelledby="delete-confirmation-modal" aria-describedby="delete-confirmation-modal-description">
           <Box
             sx={{
               position: 'absolute',
@@ -185,10 +178,7 @@ export default function Post({ post }) {
 
 export async function getStaticPaths() {
   return {
-    paths: [
-      { params: { id: ['1'] } },
-      { params: { id: ['2'] } },
-    ],
+    paths: [{ params: { id: ['1'] } }, { params: { id: ['2'] } }],
     fallback: 'blocking',
   };
 }

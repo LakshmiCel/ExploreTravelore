@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 
 const PostsSection = ({ posts }) => {
   return (
-    <Grid container id={'posts'} spacing={2} sx={{ justifyContent: 'space-around', margin: '-8px',marginTop:'10px' }}>
+    <Grid container id={'posts'} spacing={2} sx={{ justifyContent: 'space-around', margin: '-8px', marginTop: '10px' }}>
       {posts.map((post) => (
         <Grid item key={post.id} xs={12} sm={6} md={4}>
           <Card
@@ -18,9 +18,9 @@ const PostsSection = ({ posts }) => {
               boxShadow: 8,
               borderRadius: '12px',
               overflow: 'hidden',
-              maxWidth: '500px', 
+              maxWidth: '500px',
               maxHeight: '400px',
-              justifyContent: 'space-around', 
+              justifyContent: 'space-around',
               margin: '10px',
             }}
           >
@@ -41,19 +41,25 @@ const PostsSection = ({ posts }) => {
                   },
                 }}
               >
-                <Typography variant="h5" fontWeight={700} sx={{ margin: 0 }}>{post.title}</Typography>
+                <Typography variant="h5" fontWeight={700} sx={{ margin: 0 }}>
+                  {post.title}
+                </Typography>
               </div>
             </div>
 
             <CardContent sx={{ flexGrow: 1, padding: 3 }}>
-              <Typography variant="h5" fontWeight={700} sx={{ margin: 0, '@media (min-width: 600px)': { display: 'none' } }}>{post.title}</Typography>
+              <Typography variant="h5" fontWeight={700} sx={{ margin: 0, '@media (min-width: 600px)': { display: 'none' } }}>
+                {post.title}
+              </Typography>
 
               <Typography gutterBottom variant="subtitle2" color="textSecondary">
                 {format(new Date(post.createdAt), 'dd/MM/yyyy')}
               </Typography>
               <div style={{ display: 'flex', alignItems: 'center', gap: '3px', justifyContent: 'center' }}>
                 <Image src={post.avatar} alt="Avatar" width={24} height={24} style={{ borderRadius: '50%', height: '24px', width: '24px' }} />
-                <Typography variant="subtitle2" color="textSecondary">{post.author}</Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  {post.author}
+                </Typography>
               </div>
 
               <Typography variant="body2" color="textSecondary" sx={{ marginTop: 2 }}>
@@ -63,9 +69,7 @@ const PostsSection = ({ posts }) => {
 
             <CardActions sx={{ padding: 3 }}>
               <Link href={`/posts/${post.id}`} passHref>
-                <Button >
-                  Read More
-                </Button>
+                <Button>Read More</Button>
               </Link>
             </CardActions>
           </Card>
