@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Box ,Grid} from '@mui/material';
+import { Typography, Box ,Grid,Divider} from '@mui/material';
 import { useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import PostSection from '@/components/PostSection';
@@ -18,17 +18,13 @@ const Hero = ({ posts }) => {
   color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',}
 
   return (
-    <Box
-      sx={darkTheme}
-    >
+    <Box sx={darkTheme} >
       <Layout
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
     
-    <Box
-    sx={darkTheme}
-  >
+    <Box sx={darkTheme} >
     <Grid container spacing={2} sx={{ maxWidth: '1300px', paddingTop: '20px', paddingBottom: '20px', margin: 'auto' }}>
       <Grid item xs={12} md={7} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
@@ -55,10 +51,40 @@ const Hero = ({ posts }) => {
       </Grid>
     </Grid>
   </Box>
+  <Divider id={'posts'} variant="middle" sx={{ marginBottom: '10%' }} />
+  <Typography  variant="h4" gutterBottom  sx={{
+              fontSize: { xs: '1.5rem', md: '2rem',lg:'3rem' },
+              fontFamily: 'var(--font-merienda)',marginLeft:'2%'
+            }}>
+          Posts
+        </Typography>
     <PostSection posts={posts}  />
-
-      <Box sx={{ padding: '20px', backgroundColor: darkMode ? '#15232d' : 'white', marginTop: '20px' }}>
-        <Typography variant="h4" sx={{ color: darkMode ? '#e3e3e3' : 'inherit' }}>Footer Section</Typography>
+    <Divider variant="middle" sx={{ marginTop: '10%' }} />
+      <Box sx={{textAlign: 'center',  px: '10%', py:'5%', backgroundColor: darkMode ? '#15232d' : 'white', marginTop: '20px' , color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',}}>
+     
+    
+      
+        <Typography id={'about'} variant="h4" gutterBottom  sx={{
+              fontSize: { xs: '1.5rem', md: '2rem',lg:'3rem' },
+              fontFamily: 'var(--font-merienda)'
+            }}>
+          About Me
+        </Typography>
+        <Box sx={{textAlign:'justify'}}>
+          <Typography variant="body1">
+            Hello there! I'm Lakshmi, a passionate explorer and storyteller usually found wandering in and outs of Karnataka and curious Indian travelor. 
+            My journey is a mix of wanderlust and capturing moments. Whether it's chasing sunsets, sipping on a cup of chai, or
+            embarking on cultural escapades, I'm here to share my adventures with you.
+          </Typography>
+          <Typography variant="body1" sx={{ marginTop: '16px' }}>
+            Join me as I traverse through life, one beautiful destination at a time. From the bustling streets of the
+            city to the serene landscapes of nature, every step is a new chapter waiting to be written. 
+          </Typography>
+          <Typography variant="body1" sx={{fontFamily:'var(--font-merienda)', textAlign:'center',margin:'1%'}}>
+            I always feel like Travelling is not just making memories but also leaving footprints  &#128099; along way 
+          </Typography>
+        </Box>
+     
       </Box>
     </Box>
   );
@@ -66,11 +92,13 @@ const Hero = ({ posts }) => {
 
 export default Hero;
 
+
 export async function getStaticProps() {
   const response = await fetch('https://6564a1a2ceac41c0761e90ac.mockapi.io/api/v1/blogs');
   const posts = await response.json();
 
   return {
     props: { posts },
+    revalidate: 2,
   };
 }

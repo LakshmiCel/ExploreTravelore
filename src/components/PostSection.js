@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 
 const PostsSection = ({ posts }) => {
   return (
-    <Grid container id={'posts'} spacing={2} sx={{ justifyContent: 'space-around', margin: '-8px', marginTop: '10px' }}>
+    <Grid container  spacing={2} sx={{ justifyContent: 'space-around', margin: '-8px', marginTop: '10px' }}>
       {posts.map((post) => (
         <Grid item key={post.id} xs={12} sm={6} md={4}>
           <Card

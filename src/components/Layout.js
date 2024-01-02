@@ -72,7 +72,7 @@ export default function Navbar({ searchTerm, setSearchTerm }) {
 
         <Grid item>
           <Link href="/#about">
-            <Button sx={{ color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)' }}>About Us</Button>
+            <Button sx={{ color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)' }}>About Me</Button>
           </Link>
         </Grid>
         <Grid item>

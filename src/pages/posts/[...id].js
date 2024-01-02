@@ -10,6 +10,8 @@ import Layout from '../../components/Layout';
 import { useSelector } from 'react-redux';
 import { selectDarkMode } from '../../Reducers/darkModeSlice';
 import { format } from 'date-fns';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Post({ post }) {
   const [currentImage, setCurrentImage] = useState(0);
@@ -63,6 +65,20 @@ export default function Post({ post }) {
   const handleDeleteCancel = () => {
     setDeleteModalOpen(false);
   };
+  const toastifyStyle={
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  }
+  const notifySuccess = (message) => {
+    toast.success(message, toastifyStyle);
+  };
+  const notifyInfo = (message) => {
+    toast.info(message, toastifyStyle);
+  };
 
   return (
     <>
@@ -100,12 +116,10 @@ export default function Post({ post }) {
                 <IconButton
                   onClick={handlePrevClick}
                   sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: 0,
+                    position: 'relative',
                     transform: 'translateY(-50%)',
-                    bgcolor: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
+                    backgroundColor: darkMode ? 'var(--color-bg-primary-dark)' : 'var(--color-bg-primary-light)',
+          color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',
                   }}
                 >
                   <NavigateBeforeIcon />
@@ -163,15 +177,16 @@ export default function Post({ post }) {
             <Typography variant="h6" id="delete-confirmation-modal">
               Are you sure you want to delete this post?
             </Typography>
-            <Button color="primary" onClick={handleDeleteConfirm} sx={{ mt: 2, mr: 2 }}>
+            <Button color="primary" onClick={()=>{handleDeleteConfirm(); notifySuccess(`Delete on ${post.id}nd POST is successfull`)}} sx={{ mt: 2, mr: 2 }}>
               Confirm
             </Button>
-            <Button color="secondary" onClick={handleDeleteCancel} sx={{ mt: 2 }}>
+            <Button color="secondary" onClick={()=>{handleDeleteCancel(); notifyInfo(`Delete on ${post.id}nd POST was not made`)}} sx={{ mt: 2 }}>
               Cancel
             </Button>
           </Box>
         </Modal>
       </Box>
+      <ToastContainer/>
     </>
   );
 }

@@ -7,13 +7,15 @@ import { useRouter } from 'next/router';
 import Layout from '../../../components/Layout';
 import { selectDarkMode } from '@/Reducers/darkModeSlice';
 import { useSelector } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreatePost = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    avatar: '', // Use null instead of an empty string
-    images: '', // Use null instead of an empty string
+    avatar: '', 
+    images: '', 
   });
 
   const router = useRouter();
@@ -68,6 +70,7 @@ const CreatePost = () => {
         ...formData,
         createdAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
       });
+      notifySuccess("successfully created new post will be redirected to the post in few seconds")
 
       const data = response.data;
       console.log('API Response:', data);
@@ -76,6 +79,17 @@ const CreatePost = () => {
     } catch (error) {
       console.error('Error submitting form to API', error);
     }
+  };
+  const toastifyStyle={
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  }
+  const notifySuccess = (message) => {
+    toast.success(message, toastifyStyle);
   };
 
   return (
@@ -126,6 +140,7 @@ const CreatePost = () => {
           </Grid>
         </form>
       </Container>
+      <ToastContainer/>
     </>
   );
 };

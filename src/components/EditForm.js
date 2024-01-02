@@ -1,6 +1,8 @@
 // components/EditForm.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditForm = ({ post, open, onClose, onConfirm }) => {
   const [editedPost, setEditedPost] = useState({ ...post });
@@ -42,7 +44,23 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
     }
   };
 
+  const toastifyStyle={
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  }
+  const notifySuccess = (message) => {
+    toast.success(message, toastifyStyle);
+  };
+  const notifyInfo = (message) => {
+    toast.info(message, toastifyStyle);
+  };
+
   return (
+    <>
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Edit Post</DialogTitle>
       <DialogContent>
@@ -67,7 +85,9 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
         ))}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={()=>{onClose()
+        notifyInfo("No chnages are made through Edit");
+        }}>Cancel</Button>
         <Button
           onClick={async () => {
             const avatarUrl = avatarFile ? await handleImageUpload(avatarFile) : null;
@@ -80,6 +100,9 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
             };
 
             onConfirm(editedData);
+
+            // Display success notification after changes are saved
+            notifySuccess("Chnages edited is saved successfully");
           }}
           color="primary"
         >
@@ -87,6 +110,8 @@ const EditForm = ({ post, open, onClose, onConfirm }) => {
         </Button>
       </DialogActions>
     </Dialog>
+    <ToastContainer />
+    </>
   );
 };
 
