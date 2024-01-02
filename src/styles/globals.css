@@ -1,0 +1,17 @@
+:root {
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --color-text-primary-light: #27201a;
+  --color-text-primary-dark: #e3e3e3;
+  --color-bg-primary-light: #fff;
+  --color-bg-primary-dark: #15232d;
+}
+
+body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: var(--color-text-primary-light);
+  font-family: var(--font-mono);
+}
+
