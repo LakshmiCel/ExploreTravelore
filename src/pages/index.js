@@ -72,16 +72,16 @@ const Hero = ({ posts }) => {
         </Typography>
         <Box sx={{textAlign:'justify'}}>
           <Typography variant="body1">
-            Hello there! I'm Lakshmi, a passionate explorer and storyteller usually found wandering in and outs of Karnataka and curious Indian travelor. 
-            My journey is a mix of wanderlust and capturing moments. Whether it's chasing sunsets, sipping on a cup of chai, or
-            embarking on cultural escapades, I'm here to share my adventures with you.
+            Hello there! I`&apos;`m Lakshmi, a passionate explorer and storyteller usually found wandering in and outs of Karnataka and curious Indian travelor. 
+            My journey is a mix of wanderlust and capturing moments. Whether it`&apos;`s chasing sunsets, sipping on a cup of chai, or
+            embarking on cultural escapades, I`&apos;`m here to share my adventures with you.
           </Typography>
           <Typography variant="body1" sx={{ marginTop: '16px' }}>
             Join me as I traverse through life, one beautiful destination at a time. From the bustling streets of the
             city to the serene landscapes of nature, every step is a new chapter waiting to be written. 
           </Typography>
           <Typography variant="body1" sx={{fontFamily:'var(--font-merienda)', textAlign:'center',margin:'1%'}}>
-            I always feel like Travelling is not just making memories but also leaving footprints  &#128099; along way 
+            I always feel like Travelling is not just making memories but also leaving footprints 👣 along way 
           </Typography>
         </Box>
      

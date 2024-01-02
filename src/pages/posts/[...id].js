@@ -111,33 +111,38 @@ export default function Post({ post }) {
               by <Image src={post.avatar} alt="Avatar" width={24} height={24} style={{ borderRadius: '50%', height: '24px', width: '24px' }} />
             </Typography>
             {Array.isArray(post.images) ? (
-              <>
+              <div style={{position:'relative'}}>
                 <Image src={post.images[currentImage]} alt={post.title} width={800} height={500} priority />
                 <IconButton
-                  onClick={handlePrevClick}
-                  sx={{
-                    position: 'relative',
-                    transform: 'translateY(-50%)',
-                    backgroundColor: darkMode ? 'var(--color-bg-primary-dark)' : 'var(--color-bg-primary-light)',
-          color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',
-                  }}
-                >
-                  <NavigateBeforeIcon />
-                </IconButton>
-                <IconButton
-                  onClick={handleNextClick}
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: 0,
-                    transform: 'translateY(-50%)',
-                    bgcolor: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
-                  }}
-                >
-                  <NavigateNextIcon />
-                </IconButton>
-              </>
+  onClick={handlePrevClick}
+  sx={{
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    transform: 'translateY(-50%)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: 'white',
+    zIndex: 1,
+  }}
+>
+  <NavigateBeforeIcon />
+</IconButton>
+<IconButton
+  onClick={handleNextClick}
+  sx={{
+    position: 'absolute',
+    top: '50%',
+    right: 0,
+    transform: 'translateY(-50%)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    color: 'white',
+    zIndex: 1,
+  }}
+>
+  <NavigateNextIcon />
+</IconButton>
+
+              </div>
             ) : (
               <Image src={post.images} alt={post.title} width={800} height={500} priority />
             )}
