@@ -1,28 +1,49 @@
+/* eslint-disable no-use-before-define */
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { Typography, TextField, Button, Container, Grid } from '@mui/material';
+import {
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Container,
+  Grid,
+} from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import Layout from '../../../components/Layout';
-import { selectDarkMode } from '@/Reducers/darkModeSlice';
 import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+import Image from 'next/image';
+import Layout from '../../../components/Layout';
+import { selectDarkMode } from '@/Reducers/darkModeSlice';
 import 'react-toastify/dist/ReactToastify.css';
+import fetchFunction from '@/utils/fetchFunction';
 
-const CreatePost = () => {
+function CreatePost() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    avatar: '', 
-    images: '', 
+    avatar: '',
+    images: '',
   });
 
+  const [avatarUploadDisabled, setAvatarUploadDisabled] = useState(false);
   const router = useRouter();
   const darkMode = useSelector(selectDarkMode);
+  const toastifyStyle = {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  };
+  const notifySuccess = (message) => {
+    toast.success(message, toastifyStyle);
+  };
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, type } = e.target;
 
     if (type === 'file') {
       const file = e.target.files[0];
@@ -32,27 +53,38 @@ const CreatePost = () => {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: e.target.value,
     }));
   };
 
   const handleImageUpload = async (field, file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'postTravel');
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+    formDataUpload.append('upload_preset', 'postTravel');
 
     try {
-      const response = await fetch('https://api.cloudinary.com/v1_1/dsyplkvow/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const data = await fetchFunction(
+        process.env.NEXT_PUBLIC_CLOUDINARY_API_URL,
+        'post',
+        formDataUpload
+      );
 
-      const data = await response.json();
+      if (field === 'avatar') {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          avatar: data.secure_url,
+        }));
+        setAvatarUploadDisabled(true);
+      } else {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          images: Array.isArray(prevFormData.images)
+            ? [...prevFormData.images, data.secure_url]
+            : [data.secure_url],
+        }));
+      }
 
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [field]: data.secure_url,
-      }));
+      notifySuccess(`${field} uploaded successfully!`);
     } catch (error) {
       console.error(`Error uploading image to Cloudinary for ${field}`, error);
     }
@@ -66,13 +98,18 @@ const CreatePost = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://6564a1a2ceac41c0761e90ac.mockapi.io/api/v1/blogs', {
-        ...formData,
-        createdAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
-      });
-      notifySuccess("successfully created new post will be redirected to the post in few seconds")
+      const data = await fetchFunction(
+        process.env.NEXT_PUBLIC_API_ENDPOINT,
+        'post',
+        {
+          ...formData,
+          createdAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+        }
+      );
+      notifySuccess(
+        'successfully created new post will be redirected to the post in few seconds'
+      );
 
-      const data = response.data;
       console.log('API Response:', data);
 
       router.push(`/posts/${data.id}`);
@@ -80,57 +117,117 @@ const CreatePost = () => {
       console.error('Error submitting form to API', error);
     }
   };
-  const toastifyStyle={
-    position: 'top-right',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  }
-  const notifySuccess = (message) => {
-    toast.success(message, toastifyStyle);
-  };
 
   return (
     <>
       <Layout />
       <Container
         sx={{
-          backgroundColor: darkMode ? 'var(--color-bg-primary-dark)' : 'var(--color-bg-primary-light)',
-          color: darkMode ? 'var(--color-text-primary-dark)' : 'var(--color-text-primary-light)',
+          backgroundColor: darkMode
+            ? 'var(--color-bg-primary-dark)'
+            : 'var(--color-bg-primary-light)',
+          color: darkMode
+            ? 'var(--color-text-primary-dark)'
+            : 'var(--color-text-primary-light)',
           width: '100%',
           height: '100vh',
-        }}
-      >
+        }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Create Post
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField label="Title" type="text" name="title" value={formData.title} onChange={handleChange} fullWidth />
+              <TextField
+                required
+                label="Title"
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                fullWidth
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField label="Description" multiline rows={4} name="description" value={formData.description} onChange={handleChange} fullWidth />
+              <TextField
+                required
+                label="Description"
+                multiline
+                rows={4}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                fullWidth
+              />
             </Grid>
             <Grid item xs={12}>
-              <input accept="image/*" id="avatar" type="file" name="avatar" onChange={(e) => handleChange(e)} style={{ display: 'none' }} />
+              <input
+                accept="image/*"
+                id="avatar"
+                type="file"
+                name="avatar"
+                onChange={(e) => handleChange(e)}
+                style={{ display: 'none' }}
+                disabled={avatarUploadDisabled}
+              />
               <label htmlFor="avatar">
-                <Button variant="contained" startIcon={<PhotoCamera />} onClick={() => handleFileButtonClick('avatar')}>
+                <Button
+                  variant="contained"
+                  startIcon={<PhotoCamera />}
+                  onClick={() => handleFileButtonClick('avatar')}
+                  disabled={avatarUploadDisabled}>
                   Upload Avatar
                 </Button>
+                <Box sx={{ margin: '2%' }}>
+                  {formData.avatar && (
+                    <Image
+                      src={formData.avatar}
+                      alt="avatar image"
+                      width={100}
+                      height={100}
+                    />
+                  )}
+                </Box>
               </label>
-              {formData.avatar && <Typography>{formData.avatar.name}</Typography>}
+              {formData.avatar && <Typography>{formData.avatar}</Typography>}
             </Grid>
             <Grid item xs={12}>
-              <input accept="image/*" id="images" type="file" name="images" onChange={(e) => handleChange(e)} style={{ display: 'none' }} />
+              <input
+                accept="image/*"
+                id="images"
+                type="file"
+                name="images"
+                onChange={(e) => handleChange(e)}
+                style={{ display: 'none' }}
+              />
               <label htmlFor="images">
-                <Button variant="contained" startIcon={<PhotoCamera />} onClick={() => handleFileButtonClick('images')}>
+                <Button
+                  variant="contained"
+                  startIcon={<PhotoCamera />}
+                  onClick={() => handleFileButtonClick('images')}>
                   Upload Images
                 </Button>
               </label>
-              {formData.images && <Typography>{formData.images.name}</Typography>}
+              <Box sx={{ margin: '2%' }}>
+                {Array.isArray(formData.images)
+                  ? formData.images.map((image, index) => (
+                      <Image key={index} src={image} width={100} height={100} />
+                    ))
+                  : formData.images && (
+                      <Image src={formData.images} width={100} height={100} />
+                    )}
+              </Box>
+
+              <Grid sx={{ paddingLeft: '15px' }}>
+                {Array.isArray(formData.images) &&
+                  formData.images.length > 0 && (
+                    <Typography>{formData.images.join(', ')}</Typography>
+                  )}
+                {typeof formData.images === 'string' &&
+                  formData.images.length > 0 && (
+                    <Typography>{formData.images}</Typography>
+                  )}
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary">
@@ -140,9 +237,9 @@ const CreatePost = () => {
           </Grid>
         </form>
       </Container>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
-};
+}
 
 export default CreatePost;

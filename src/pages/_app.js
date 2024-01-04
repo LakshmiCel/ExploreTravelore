@@ -1,13 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
+import '@/styles/globals.css';
+import { Merienda } from 'next/font/google';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
-import createEmotionCache from '../utils/createEmotionCache';
-import '@/styles/globals.css';
-import { Merienda } from '@next/font/google';
-import { Provider } from 'react-redux';
 import store from '../Reducers/store';
+import createEmotionCache from '../utils/createEmotionCache';
 
 // If loading a variable font, you don't need to specify the font weight
 const merienda = Merienda({
