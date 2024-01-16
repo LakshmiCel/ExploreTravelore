@@ -1,5 +1,13 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, Grid } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  CardHeader,
+  Avatar,
+} from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,7 +19,7 @@ function PostsSection({ posts }) {
       container
       spacing={2}
       sx={{
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         padding: '1%',
         marginTop: '10px',
@@ -19,13 +27,20 @@ function PostsSection({ posts }) {
         margin: '0 auto',
       }}>
       {posts.map((post) => (
-        <Grid item key={post.id} xs={12} sm={6} md={4}>
+        <Grid
+          style={{ maxWidth: 'fit-content !important' }}
+          item
+          key={post.id}
+          xs={12}
+          sm={6}
+          md={4}
+          sx={{ justifyContent: 'center', padding: '5%' }}>
           <Card
+            elevation={10}
             sx={{
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
-              boxShadow: 8,
               borderRadius: '12px',
               overflow: 'hidden',
               maxWidth: '300px',
@@ -40,12 +55,13 @@ function PostsSection({ posts }) {
                 paddingBottom: '60%',
                 overflow: 'hidden',
               }}>
-              {console.log(post)}
+              {/* {console.log(post)} */}
               <Image
                 src={Array.isArray(post.images) ? post.images[0] : post.images}
                 alt={post.title}
                 layout="fill"
                 objectFit="cover"
+                style={{ filter: 'brightness(70%)' }}
               />
               <div
                 style={{
@@ -66,8 +82,17 @@ function PostsSection({ posts }) {
                 </Typography>
               </div>
             </div>
-
-            <CardContent sx={{ flexGrow: 1, padding: 3 }}>
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt="Avatar Image"
+                  src={post.avatar}
+                  sx={{ width: 25, height: 25 }}
+                />
+              }
+              subheader={format(new Date(post.createdAt), 'MMMM d, yyyy')}
+            />
+            <CardContent sx={{ flexGrow: 1 }}>
               <Typography
                 variant="h5"
                 fontWeight={700}
@@ -79,31 +104,9 @@ function PostsSection({ posts }) {
               </Typography>
 
               <Typography
-                gutterBottom
-                variant="subtitle2"
-                color="textSecondary">
-                {format(new Date(post.createdAt), 'dd/MM/yyyy')}
-              </Typography>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  justifyContent: 'center',
-                }}>
-                <Image
-                  src={post.avatar}
-                  alt="Avatar"
-                  width={24}
-                  height={24}
-                  style={{ borderRadius: '50%', height: '24px', width: '24px' }}
-                />
-              </div>
-
-              <Typography
                 variant="body2"
                 color="textSecondary"
-                sx={{ marginBottom: 2 }}>
+                sx={{ marginBottom: 2, textWrap: 'center' }}>
                 {post.description.slice(0, 100)}...
                 <Link href={`/posts/${post.id}`} passHref>
                   <Button>Read More</Button>

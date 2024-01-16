@@ -24,7 +24,7 @@ function CreatePost() {
     title: '',
     description: '',
     avatar: '',
-    images: '',
+    images: [],
   });
 
   const [avatarUploadDisabled, setAvatarUploadDisabled] = useState(false);
@@ -78,9 +78,12 @@ function CreatePost() {
       } else {
         setFormData((prevFormData) => ({
           ...prevFormData,
-          images: Array.isArray(prevFormData.images)
-            ? [...prevFormData.images, data.secure_url]
-            : [data.secure_url],
+          images:
+            prevFormData.images.length > 1
+              ? Array.isArray(prevFormData.images)
+                ? [...prevFormData.images, data.secure_url]
+                : [prevFormData.images, data.secure_url]
+              : data.secure_url,
         }));
       }
 
@@ -120,6 +123,7 @@ function CreatePost() {
 
   return (
     <>
+      {console.log(formData, 'form data')}
       <Layout />
       <Container
         sx={{
@@ -189,7 +193,7 @@ function CreatePost() {
                   )}
                 </Box>
               </label>
-              {formData.avatar && <Typography>{formData.avatar}</Typography>}
+              {/* {formData.avatar && <Typography>{formData.avatar}</Typography>} */}
             </Grid>
             <Grid item xs={12}>
               <input
@@ -211,23 +215,36 @@ function CreatePost() {
               <Box sx={{ margin: '2%' }}>
                 {Array.isArray(formData.images)
                   ? formData.images.map((image, index) => (
-                      <Image key={index} src={image} width={100} height={100} />
+                      <Image
+                        key={index}
+                        alt="image"
+                        src={image}
+                        width={100}
+                        height={100}
+                        priority
+                      />
                     ))
                   : formData.images && (
-                      <Image src={formData.images} width={100} height={100} />
+                      <Image
+                        src={formData.images}
+                        alt="image"
+                        width={100}
+                        height={100}
+                        priority
+                      />
                     )}
               </Box>
 
-              <Grid sx={{ paddingLeft: '15px' }}>
+              {/* <Grid sx={{ paddingLeft: '15px' }}>
                 {Array.isArray(formData.images) &&
                   formData.images.length > 0 && (
                     <Typography>{formData.images.join(', ')}</Typography>
                   )}
                 {typeof formData.images === 'string' &&
-                  formData.images.length > 0 && (
-                    <Typography>{formData.images}</Typography>
-                  )}
-              </Grid>
+                  formData.images.length > 0 
+                    // <Typography>{formData.images}</Typography>
+                  }
+              </Grid> */}
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary">

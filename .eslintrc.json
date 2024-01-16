@@ -29,6 +29,10 @@
     "react/forbid-prop-types": "off",
     "react/require-default-props": "off",
     "no-unsafe-optional-chaining": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "prefer-template": "off",
+    "object-shorthand": "off",
+    "no-use-before-define": "off",
+    "no-nested-ternary": "off"
   }
 }

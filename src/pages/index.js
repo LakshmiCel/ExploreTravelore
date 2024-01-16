@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
-import { Typography, Box, Grid, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Typography,
+  Box,
+  Grid,
+  Divider,
+  Backdrop,
+  CircularProgress,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
 // import { revalidatePath, revalidateTag } from 'next/cache';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import PostSection from '@/components/PostSection';
 import { selectDarkMode } from '../Reducers/darkModeSlice';
 import fetchFunction from '@/utils/fetchFunction';
 
 function Hero({ posts }) {
+  const router = useRouter();
+  console.log('router.isLoading:', router.isReady);
+
   const darkMode = useSelector(selectDarkMode);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -23,10 +34,34 @@ function Hero({ posts }) {
       ? 'var(--color-text-primary-dark)'
       : 'var(--color-text-primary-light)',
   };
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setLoading(true);
+    const handleComplete = () => setLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, [router]);
 
   return (
     <Box sx={darkTheme}>
       <Layout searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {/* {console.log(router.events, 'router events')} */}
+      {loading && (
+        <Backdrop
+          open={loading}
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
 
       <Box sx={darkTheme}>
         <Grid
@@ -34,10 +69,11 @@ function Hero({ posts }) {
           spacing={2}
           sx={{
             maxWidth: '90vw',
-            height: '70vh',
-            paddingTop: '10px', // Adjust the paddingTop to your desired value
+
+            paddingTop: '10px',
             paddingBottom: '20px',
             margin: 'auto',
+            height: 'auto',
           }}>
           <Grid
             item
@@ -80,15 +116,15 @@ function Hero({ posts }) {
               justifyContent: 'center',
             }}>
             <Image
-              src={darkMode ? '/hero.png' : '/hero.png'}
+              src={!darkMode ? '/hero.png' : '/mountain.png'}
               alt="hero image"
-              width={350} // Adjust the width to your desired value
-              height={350} // Adjust the height to your desired value
+              width={350}
+              height={350}
             />
           </Grid>
         </Grid>
       </Box>
-      <Divider id="posts" variant="middle" sx={{ marginBottom: '10%' }} />
+      <Divider id="posts" variant="middle" sx={{ marginBottom: '12vh' }} />
       <Typography
         variant="h4"
         gutterBottom
@@ -108,6 +144,7 @@ function Hero({ posts }) {
           py: '5%',
           backgroundColor: darkMode ? '#15232d' : 'white',
           marginTop: '20px',
+          height: 'auto',
           color: darkMode
             ? 'var(--color-text-primary-dark)'
             : 'var(--color-text-primary-light)',
