@@ -27,7 +27,7 @@ https://github.com/LakshmiCel/ExploreTravelore-TravelBlog/assets/146925327/a5e4b
 https://github.com/LakshmiCel/ExploreTravelore-TravelBlog/assets/146925327/4c579cdc-8723-40d5-a5fc-49ce77b712bd
 
 ## Deployment
-[Click on me😉.To open the deployment link](explore-travelore-travel-blog.vercel.app)
+[🔗Click me to redirect to page 😉](https://explore-travelore-travel-blog.vercel.app/)
 
 ## Installation Steps
 
